@@ -14,11 +14,15 @@ import {RootStackParamsList, ServiceDescriptor} from "../types/Types";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+//type HomeScreenProps = 
+  //NativeStackScreenProps<RootStackParamsList, "Home">
+
 type HomeScreenProps = 
   NativeStackScreenProps<RootStackParamsList, "Home">
 
 
-export const Home:React.FC<HomeScreenProps> = ({ navigation }) => {
+export const Home: React.FC<HomeScreenProps> = ({navigation}) => {
+
   const { zeroconf, agent } = useContext(AppContext)
   const [services, setServices] = useState<Action[]>([]);
   const [isScanning, setIsScanning] = useState<boolean>(false);
@@ -79,7 +83,6 @@ export const Home:React.FC<HomeScreenProps> = ({ navigation }) => {
     }, 10000)
   }, [services]);
 
-  //const handleOnClick    = useCallback( ()=>{}, [] )
   
   const storeData = useCallback( async( value: string ) => {
     try {
@@ -98,17 +101,21 @@ export const Home:React.FC<HomeScreenProps> = ({ navigation }) => {
 
     zeroconf.on('start', () => {setIsScanning(true);console.log('The scan has started.');});
     zeroconf.on('stop', () =>  {setIsScanning(false);console.log('The scan has stoped.');});
-    //zeroconf.on('found',(service) => {console.log('Service found (not resolved):', service);});
+
     zeroconf.on('found',(service) => {
       console.log('Service found (not resolved):', service);
       console.log(zeroconf.getServices())
     });
 
     zeroconf.on('resolved', (service:Service )=> {
+
       console.log(`Resolved but now put in SDA ${service.host}  ${service.name}`);
       agent.addToSCA(service.host+":"+service.port.toString(), service.name);
+      
       //setServices(agent.getAvailableActionsDictionary());
+
       setServices(agent.getAvailableActions());
+
       //agent.getAvailableActionsDictionary()
       //console.log(agent.getAvailableActionsDictionary()["192.168.1.15"][0].name)
     });

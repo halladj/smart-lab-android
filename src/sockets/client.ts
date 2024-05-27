@@ -85,11 +85,11 @@ export class TCPClient {
         // Handle different types of messages here
         switch (message.messageType) {
             case MessageType.Response:
-                console.log(message);
                 console.log(`Response from server: ${message.data.result}`);
+                this.setState({value: message.data.result})
+                this.client.end();
                 // TODO: clean this up:
                 //this.result= {value: message.data.result};
-                this.setState({value: message.data.result})
                 break;
             case MessageType.Update:
                 console.log(`Update from server: ${message.data}`);

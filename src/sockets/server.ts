@@ -67,12 +67,13 @@ export class TCPServer {
         try {
             const parsedMessage: RequestType= JSON.parse(message);
             console.log(`Received message type: ${MessageType[parsedMessage.messageType]}, data: ${parsedMessage.data}`);
+            console.log(`Action Type ${parsedMessage.data.action}`);
+
             switch (parsedMessage.messageType) {
                 case MessageType.Request:
                     this.sendMessage({ messageType: MessageType.Response, data: {result:"3.14455"} }, sock);
                     break;
                 case MessageType.Identify:
-                    console.log("im inside this");
                     const data=await AsyncStorage.getItem("Identifier");
                     if (data != null){
                       this.sendMessage({ 

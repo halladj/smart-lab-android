@@ -26,12 +26,16 @@
       "package": "com.halladj.mobileclient",
       "permissions": [
         "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_BACKGROUND_LOCATION",
         "android.permission.ACCESS_WIFI_STATE",
         "android.permission.CHANGE_WIFI_STATE",
+        "android.permission.NEARBY_WIFI_DEVICES",
         "android.permission.WRITE_EXTERNAL_STORAGE",
         "android.permission.READ_EXTERNAL_STORAGE",
-        "android.permission.NEARBY_WIFI_DEVICES",
-        "android.permission.ACCESS_FINE_LOCATION"
+        "android.permission.cameraPermission",
+        "android.permission.microphonePermission",
+        "android.permission.recordAudioAndroid"
       ]
     },
     "web": {
@@ -39,7 +43,8 @@
     },
     "plugins": [
       "react-native-wifi-reborn",
-      "expo-location"
+      "expo-location",
+      "expo-camera"
     ],
     "extra": {
       "eas": {

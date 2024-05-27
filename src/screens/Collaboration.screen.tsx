@@ -4,7 +4,6 @@ import {SafeAreaView} from "react-native-safe-area-context";
 import {TCPClient} from "../sockets/client";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamsList} from "../types/Types";
-//import TcpSocket from "react-native-tcp-socket"
 
 
 type CollaborationScreenProps = 
@@ -18,11 +17,9 @@ export const Collaboration: React.FC<CollaborationScreenProps> = ( props ) => {
   const [actionName ]      = useState<string>(props.route.params.actionName);
   const [host]             = useState<string>(props.route.params.host.split(":")[0]);
   const [port]             = useState<string>(props.route.params.host.split(":")[1]);
-  //const [actionName, setActionName] useState<string>(navigation.hey)
   useEffect( ()=>{
 
     const client = new TCPClient(host, parseInt(port), actionName, setResult);
-
     client.connect();
     //setResult( client.result );
 

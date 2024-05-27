@@ -1,10 +1,13 @@
 export type RootStackParamsList = {
   Home: undefined,
+  QrScanner:undefined,
+  Page3: undefined,
   Collaboration:{ 
     actionName:string,
     host      : string,
   }, 
-  Authentication: undefined
+  Authentication: undefined,
+  Main : {screen:string}
 }
 
 
