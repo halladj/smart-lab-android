@@ -20,20 +20,6 @@ export default function App() {
   const [peers, setPeers]                               = useState<any>();
 
 
-  const callback = useCallback( ()=>{
-    handleLocationPermissions(setLocationCurrentValue);
-    initailizeP2P();
-    discoverPeers();
-    setNewPeerSubscription(connectToPeers(peers, setPeers));
-    //setNewPeerSubscription(connectToPeers(peers, setPeers));
-
-  }, []);
-
-  //const p2p_intialization = useCallback( ()=> {
-    //initailizeP2P();
-  //},[]);
-
-
   useEffect(()=>{
 
     PermissionsAndroid.request(
@@ -52,10 +38,8 @@ export default function App() {
     }
     }).catch(()=>console.log("Error: Permission denied"));
 
+    // handle regualr wifi.
 
-    callback();
-
-    
   },[]);
 
   
