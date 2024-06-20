@@ -6,7 +6,7 @@ import { Text } from 'react-native';
 
 
 export const Page2:React.FC  = () => {
-  return <Text>Hambiza</Text>
+  return <Text>{"Qr code Scanner"}</Text>
 }
 
 

@@ -13,9 +13,9 @@ import {Action} from "../types/Agent";
 import {RootStackParamsList, ServiceDescriptor} from "../types/Types";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {discoverPeers} from "../utility/peer-to-peer";
+import {connectWithConfig, subscribeOnPeersUpdates} from "react-native-wifi-p2p";
 
-//type HomeScreenProps = 
-  //NativeStackScreenProps<RootStackParamsList, "Home">
 
 type HomeScreenProps = 
   NativeStackScreenProps<RootStackParamsList, "Home">
@@ -27,35 +27,13 @@ export const Home: React.FC<HomeScreenProps> = ({navigation}) => {
   const [services, setServices] = useState<Action[]>([]);
   const [isScanning, setIsScanning] = useState<boolean>(false);
 
-  const myService: ServiceDescriptor= { 
-    type    : 'http',
-    protocol: 'tcp',
-    domain  : 'local.',
-    name    : 'identify',
-    port    : 7070,
-    txt     : { 
-      Agent_identifier: 'hey its me' ,
-    }
-  };
+  
 
   const onPress = useCallback( (actionName:string, host:string) => {
     navigation.push("Collaboration", {actionName : actionName, host:host })
   }, [] )
 
-  const publishService = useCallback( (s:ServiceDescriptor) => {
-
-    agent.SDA.push(new Action(s.name));
-    zeroconf.publishService(
-      s.type, 
-      s.protocol, 
-      s.domain, 
-      s.name, 
-      s.port, 
-      s.txt
-    );
-  }, []);
-
-
+  
   //const refreshData = () => {
     //if (isScanning) {
       //return
@@ -78,18 +56,15 @@ export const Home: React.FC<HomeScreenProps> = ({navigation}) => {
     }
     setServices([])
     zeroconf.scan('http', 'tcp', 'local.')
-    setTimeout(() => {
-      zeroconf.stop()
-    }, 10000)
+    //setTimeout(() => {
+      //zeroconf.stop()
+    //}, 10000)
   }, [services]);
 
   
   const storeData = useCallback( async( value: string ) => {
     try {
-
-      //const jsonValue = JSON.stringify(value);
       await AsyncStorage.setItem('Identifier', value);
-
     } catch (e) {
       console.log("Error tying to store data in local storage... ", e);
     }
@@ -97,24 +72,28 @@ export const Home: React.FC<HomeScreenProps> = ({navigation}) => {
   
   useEffect( () => {
 
+    
     storeData("191934032196");
-
     zeroconf.on('start', () => {setIsScanning(true);console.log('The scan has started.');});
     zeroconf.on('stop', () =>  {setIsScanning(false);console.log('The scan has stoped.');});
 
-    zeroconf.on('found',(service) => {
-      console.log('Service found (not resolved):', service);
-      console.log(zeroconf.getServices())
-    });
+    //zeroconf.on('found',(service) => {
+      //console.log('Service found (not resolved):', service);
+      //console.log(zeroconf.getServices())
+    //});
 
     zeroconf.on('resolved', (service:Service )=> {
 
-      console.log(`Resolved but now put in SDA ${service.host}  ${service.name}`);
-      agent.addToSCA(service.host+":"+service.port.toString(), service.name);
-      
-      //setServices(agent.getAvailableActionsDictionary());
+      console.log(`Resolved but now put in SDA:
+                  ${service.host}  ${service.name} 
+                  txt: ${service.txt.Agent_identifier}`);
 
-      setServices(agent.getAvailableActions());
+      if (service.txt.Agent_identifier !== undefined){
+        agent.addToSCA(service.host+":"+service.port.toString(), service.name);
+        setServices(agent.getAvailableActions());
+      }
+      //
+      //setServices(agent.getAvailableActionsDictionary());
 
       //agent.getAvailableActionsDictionary()
       //console.log(agent.getAvailableActionsDictionary()["192.168.1.15"][0].name)
@@ -127,10 +106,26 @@ export const Home: React.FC<HomeScreenProps> = ({navigation}) => {
 
     });
     discoveryRoutine()
-    publishService(myService);
   }, []);
 
   return (
+
+    //<View>
+    //<DiscoveryCard 
+        //name={ "Identification Service"} 
+        //host= {"172.16.0.4"}
+        //addresses={["172.16.0.4"]} 
+      //port = {3000}/>
+
+      //<DiscoveryCard 
+       //name={ "Face Recognition Service"} 
+        //host= {"172.16.0.9"}
+        //addresses={["172.16.0.9"]} 
+      //port = {3000}/>
+
+      
+    //</View>
+        //{
     <View style={styles.container}>
       <FlatList
         data = {services}
@@ -162,6 +157,7 @@ export const Home: React.FC<HomeScreenProps> = ({navigation}) => {
       >
       </FlatList>
     </View>
+//}
   );
 }
 

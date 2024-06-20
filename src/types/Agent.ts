@@ -23,7 +23,7 @@ export class Action {
   }
 
   addToSCA ( agentName:string ): boolean{
-    if (this.SCA.has(agentName)){
+    if (!this.SCA.has(agentName)){
       this.SCA.add(agentName)
       return true;
     }

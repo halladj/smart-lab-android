@@ -8,5 +8,5 @@ export const Page3:React.FC  = () => {
 
 
 
-  return <Text>Hambiza</Text>
+  return <Text>Page3</Text>
 }

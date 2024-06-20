@@ -17,10 +17,10 @@ export const Authentication: React.FC<AuthScreenProps> = ({navigation}) => {
 
   const storeData = useCallback( async( value: string ) => {
     try {
+
       //const jsonValue = JSON.stringify(value);
       await AsyncStorage.setItem('Identifier', value);
       getDate();
-
     } catch (e) {
       console.log("Error tying to store data in local storage... ", e);
     }
